@@ -1,4 +1,4 @@
-package org.yqj.thrift.demo;
+package org.yqj.thrift.demo.simple;
 
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
