@@ -10,6 +10,22 @@ import org.yqj.thrift.api.MultiplicationService;
 public class MultiplicationHandler implements MultiplicationService.Iface{
     @Override
     public int multiply(int n1, int n2) throws TException {
+        System.out.println("current thread execution name is : " + Thread.currentThread().getName());
         return n1 * n2;
+    }
+
+    @Override
+    public int add(int n1, int n2) throws TException {
+        return n1 + n2;
+    }
+
+    @Override
+    public int sub(int n1, int n2) throws TException {
+        return n1 - n2;
+    }
+
+    @Override
+    public int div(int n1, int n2) throws TException {
+        return n1 / n2;
     }
 }

@@ -14,7 +14,7 @@
         <spring.boot.version>2.0.2.RELEASE</spring.boot.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <apache.thrift>0.11.0</apache.thrift>
+        <apache.thrift>0.10.0</apache.thrift>
     </properties>
 
     <modules>

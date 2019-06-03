@@ -1,8 +1,14 @@
 package org.yqj.thrift.server;
 
+import org.apache.thrift.server.TNonblockingServer;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TServer.Args;
 import org.apache.thrift.server.TSimpleServer;
+import org.apache.thrift.server.TThreadPoolServer;
+import org.apache.thrift.server.TThreadedSelectorServer;
+import org.apache.thrift.transport.TNonblockingServerSocket;
+import org.apache.thrift.transport.TNonblockingSocket;
+import org.apache.thrift.transport.TNonblockingTransport;
 import org.apache.thrift.transport.TSSLTransportFactory;
 import org.apache.thrift.transport.TSSLTransportFactory.TSSLTransportParameters;
 import org.apache.thrift.transport.TServerSocket;
@@ -23,9 +29,56 @@ public class MultiplicationServer {
         try {
             handler = new MultiplicationHandler();
             processor = new MultiplicationService.Processor(handler);
-            new Thread(()-> simple(processor)).start();
+            new Thread(()-> noblockServerTransport(processor)).start();
         } catch (Exception x) {
             x.printStackTrace();
+        }
+    }
+
+    /**
+     * nio 多线程执行方式
+     * @param processor
+     */
+    public static void nonblockThreadTransport(MultiplicationService.Processor processor){
+        try {
+            TNonblockingServerSocket transport = new TNonblockingServerSocket(9090);
+            TThreadedSelectorServer tNonblockingServer = new TThreadedSelectorServer(new TThreadedSelectorServer.Args(transport).processor(processor));
+            System.out.println("Starting the simple server...");
+            tNonblockingServer.serve();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * nio 非阻塞方式, 单线程执行方式
+     * @param processor
+     */
+    public static void noblockServerTransport(MultiplicationService.Processor processor){
+        try {
+            TNonblockingServerSocket serverTransport = new TNonblockingServerSocket(9090);
+            TNonblockingServer tNonblockingServer = new TNonblockingServer(new TNonblockingServer.Args(serverTransport).processor(processor));
+
+            System.out.println("Starting the simple server...");
+            tNonblockingServer.serve();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * TServer 多线程执行方式
+     * @param processor
+     */
+    public static void multipleThreadPoolServer(MultiplicationService.Processor processor){
+        try {
+            TServerTransport serverTransport = new TServerSocket(9090);
+            TServer server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport).processor(processor));
+
+            System.out.println("Starting the simple server...");
+            server.serve();
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
