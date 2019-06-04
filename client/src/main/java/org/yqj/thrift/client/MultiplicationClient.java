@@ -7,6 +7,7 @@ import org.apache.thrift.transport.TFramedTransport;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.yqj.thrift.api.MultiplicationService;
+import org.yqj.thrift.api.Person;
 
 /**
  * Created by yaoqijun on 2018/8/16.
@@ -14,9 +15,31 @@ import org.yqj.thrift.api.MultiplicationService;
  */
 public class MultiplicationClient {
     public static void main(String[] args) throws Exception {
-        for (int i=0; i<10; i++){
-            new Thread(()->singleThread()).start();
-//            new Thread(()->nonFrameBlockSingleTest()).start();
+//        for (int i=0; i<10; i++){
+//            new Thread(()->singleThread()).start();
+////            new Thread(()->nonFrameBlockSingleTest()).start();
+//        }
+
+        testGetPerson();
+    }
+
+    private static void testGetPerson(){
+        try {
+
+            TTransport transport;
+
+            transport = new TSocket("localhost", 9090);
+            transport.open();
+
+            TProtocol protocol = new TBinaryProtocol(transport);
+            MultiplicationService.Client client = new MultiplicationService.Client(protocol);
+
+            Person person = client.personContent(100);
+            System.out.println("person content is : " + person.toString());
+
+            transport.close();
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 

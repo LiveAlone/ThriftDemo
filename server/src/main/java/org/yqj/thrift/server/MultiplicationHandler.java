@@ -2,6 +2,7 @@ package org.yqj.thrift.server;
 
 import org.apache.thrift.TException;
 import org.yqj.thrift.api.MultiplicationService;
+import org.yqj.thrift.api.Person;
 
 /**
  * Created by yaoqijun on 2018/8/16.
@@ -27,5 +28,14 @@ public class MultiplicationHandler implements MultiplicationService.Iface{
     @Override
     public int div(int n1, int n2) throws TException {
         return n1 / n2;
+    }
+
+    @Override
+    public Person personContent(long id) throws TException {
+        Person person = new Person();
+        person.setName("yaoqijun");
+        person.setAge(100);
+        person.setGrade(123.123);
+        return person;
     }
 }

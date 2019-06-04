@@ -29,9 +29,25 @@ public class MultiplicationServer {
         try {
             handler = new MultiplicationHandler();
             processor = new MultiplicationService.Processor(handler);
-            new Thread(()-> noblockServerTransport(processor)).start();
+            new Thread(()-> simple(processor)).start();
         } catch (Exception x) {
             x.printStackTrace();
+        }
+    }
+
+    /**
+     * 单线程阻塞方式
+     * @param processor
+     */
+    public static void simple(MultiplicationService.Processor processor) {
+        try {
+            TServerTransport serverTransport = new TServerSocket(9090);
+            TServer server = new TSimpleServer(new Args(serverTransport).processor(processor));
+
+            System.out.println("Starting the simple server...");
+            server.serve();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -78,18 +94,6 @@ public class MultiplicationServer {
             System.out.println("Starting the simple server...");
             server.serve();
         }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    public static void simple(MultiplicationService.Processor processor) {
-        try {
-            TServerTransport serverTransport = new TServerSocket(9090);
-            TServer server = new TSimpleServer(new Args(serverTransport).processor(processor));
-
-            System.out.println("Starting the simple server...");
-            server.serve();
-        } catch (Exception e) {
             e.printStackTrace();
         }
     }
